@@ -104,37 +104,6 @@ infect_data <- read.csv(paste0(data_dir, "/infections_censored.csv"))
 # create visualization #
 ########################
 
-
-# PROMISE T score box plot
-
-col <- "t_anxty"
-
-col_to_show <- sub(".*t_", "", col)
-tscore_data$Timestamp <- factor(tscore_data$Timestamp, levels = c("Baseline", "Day30", "Day120"))
-tscore_data[[col]] <- as.numeric(as.character(tscore_data[[col]]))
-
-img <- ggplot(tscore_data, aes(x = Timestamp, y = !!sym(col), color = Group)) +
-  geom_boxplot(lwd = 0.5) +
-  geom_jitter(alpha = 0.15) +
-  stat_summary(
-    color = "black",
-    fun.data = function(x) data.frame(y = max(x) + 2, label = paste("n =", length(x))),
-    geom = "text",
-    vjust = 0
-  ) +
-  labs(
-    title = toTitleCase(paste0(PROMIS_name_d[col_to_show], " T score")),
-    x = "time", y = PROMIS_name_d[col_to_show]
-  ) +
-  publication_theme +
-  facet_wrap(~ Group) + 
-  scale_color_manual(values = custom_colors)
-
-save_path <- paste0(fig_dir, "/overall_", col, ".png")
-save_png(save_path, img)
-
-
-
 # clinical out stacked bar plot
 
 outcome_pivot_data <- outcome_data %>% 
